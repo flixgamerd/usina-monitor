@@ -4,6 +4,7 @@
  "Porque monitorar a água manualmente é tão 1990. Deixe o ESP32 sofrer por você."
 
 Este projeto é o núcleo de processamento para monitoramento de salinização e pH, desenvolvido com o rigor técnico de quem usa Arch Linux e a paciência de quem configura o Neovim do zero.
+
 🚀 Funcionalidades (ou "O que o cérebro faz")
 
 1. Cálculo de Salinização: Conversão precisa de dados analógicos para mg/L.
