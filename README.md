@@ -1,36 +1,90 @@
+# 🧠 Usina Monitor
 
-🧠 Usina-Monitor: O Cérebro Eletrônico
+> "Monitorar água manualmente é coisa do século passado. Deixe o ESP32 trabalhar por você."
 
- "Porque monitorar a água manualmente é tão 1990. Deixe o ESP32 sofrer por você."
+Firmware para monitoramento em tempo real de salinidade e pH da água,
+desenvolvido para ESP32. Processa sinais analógicos de múltiplos sensores,
+suaviza ruído via média ADC e transmite os dados pela porta serial.
 
-Este projeto é o núcleo de processamento para monitoramento de salinização e pH, desenvolvido com o rigor técnico de quem usa Arch Linux e a paciência de quem configura o Neovim do zero.
+---
 
-🚀 Funcionalidades (ou "O que o cérebro faz")
+## 🚀 Funcionalidades
 
-1. Cálculo de Salinização: Conversão precisa de dados analógicos para mg/L.
+- **Salinidade** — conversão de sinal analógico para ppm via mapeamento ADC 12-bit
+- **pH** — cálculo por voltagem com calibração configurável
+- **Suavização de ruído** — média de 10 amostras por ciclo de leitura
+- **Clamping de segurança** — pH travado entre 0.0 e 14.0, sem valores impossíveis
+- **Dual-channel** — dois sensores simultâneos nos pinos 34 e 35
 
-2. Monitoramento de pH: Algoritmo com calibração de voltagem e sensibilidade.
+---
 
-3. Lógica de Clamping: Travas de segurança para evitar que o pH desafie as leis da química (0-14).
+## 🛠️ Stack
 
-4. Dual-Channel: Suporte a múltiplos sensores via ADC de 12 bits.
+| Camada | Tecnologia |
+|---|---|
+| Hardware | ESP32 |
+| Linguagem | C++ / Arduino Framework |
+| Build | arduino-cli / PlatformIO |
+| Simulação | Wokwi |
+| Editor | Neovim (Arch Linux) |
 
-🛠️ Stack Tecnológica
+---
 
- 1. Hardware: ESP32 (O hospedeiro).
+## ⚙️ Como usar
 
- 2. Linguagem: C++/Arduino (A alma do negócio).
+**1. Clone o repositório**
+```bash
+git clone https://github.com/flixgamerd/usina-monitor
+cd usina-monitor
+```
 
- 3. Editor: Neovim (Porque o VS Code é pesado demais para o meu Arch) .
+**2. Compile e suba para o ESP32**
+```bash
+arduino-cli compile --fqbn esp32:esp32:esp32 .
+arduino-cli upload -p /dev/ttyUSB0 --fqbn esp32:esp32:esp32 .
+```
 
- 4. Simulação: Wokwi (Onde nenhum sensor morre de verdade).
+**3. Monitore a saída serial**
+```bash
+arduino-cli monitor -p /dev/ttyUSB0 --config baudrate=115200
+```
 
-⚙️ Como rodar (Se você for corajoso)
+---
 
-    1. Clone o repositório: git clone https://github.com/flixgamerd/usina-monitor.
+## 📡 Saída serial esperada
+```
+---Valores Finais---
+Salinidade: 734.56 ppm
+Nivel de PH: 7.23
+---
+```
 
- 2. Abra no seu Neovim ou VS Code (tanto faz).
+---
 
- 3. Use o arduino-cli para compilar e subir para o seu ESP32.
+## 🔧 Calibração
 
-    Nota do Dev: "Aviso: Este código foi testado em um ambiente controlado (Wokwi). Se você mergulhar o seu ESP32 na água sem proteção e ele começar a soltar fumaça, a culpa é da física, não da minha matemática
+Os valores padrão são estimativas genéricas para sensores analógicos comuns.
+**Sem calibração, o pH pode ter erro de ± 1.5 unidades.**
+
+**Sensor de pH:**
+1. Mergulhe o sensor em solução buffer pH 7.0
+2. Meça a voltagem de saída com multímetro
+3. Atualize `PH_Neutro` com o valor medido
+4. Repita com buffer pH 4.0 e recalcule `PH_Passo`
+
+**Sensor de salinidade:**
+- Ajuste `PPM_MAX_ESTIMADO` com uma solução de referência conhecida
+
+---
+
+## ⚠️ Aviso
+
+Projeto desenvolvido e testado em ambiente simulado (Wokwi).
+Certifique-se de proteger adequadamente o hardware antes de qualquer
+contato com água real. A física não aceita pull requests.
+
+---
+
+## Autor
+
+**Flix codes** — [github.com/flixgamerd](https://github.com/flixgamerd)
