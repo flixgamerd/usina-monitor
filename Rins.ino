@@ -2,52 +2,68 @@
 //---Variaveis---pra definir os pinos 
 const int pinoSalinidade = 34;
 const int pinoPH = 35;//novo pino adicionado
+
+//--Configuracao da medida ADC.
+const int NUM_AMOSTRAS = 10;
+
+//funcao: medida de leitura ADC.
+int lerMedidaADC(int pino)
+{
+
+  long soma = 0;
+  for (int c = 0; c < NUM_AMOSTRAS; c++)
+  {
+    soma += analogRead(pino);
+    delay(5);
+  }
+  return (int)(soma / NUM_AMOSTRAS);
+}
+
+//--- Fator de conversao para sensor generico ---
+// Sem calibracao, os valores sao estimativas relativas, nao medicoes absolutas.
+const float PPM_MAX_ESTIMADO = 1000.0;
+
 //funcoes de calculo
 
   float converterLeitura(int leitura)
   {
-    float rawMin = 0;
-    float rawMax = 4095;
-    float fisMin = 0;
-    float fisMax = 1000;
-
-    return ((float)(leitura - rawMin) / (rawMax - rawMin)) * (fisMax - fisMin) + fisMin;
+    return ((float)leitura / 4095.0) * PPM_MAX_ESTIMADO;//*novo: calculo simplificado
   }
 
 //----calculo de PH da agua----
 //definicoes para o sensor
-const float PH_Neutro = 2.5;//voltagem para quando o ph for 7.0
-const float PH_Passo = 0.18;//Sensibilidade do sensor por unidade de PH
+const float PH_Neutro = 2.5; // voltagem (V) quando pH = 7.0
+const float PH_Passo = 0.18;// variacao de voltagem por unidade de pH
 
 float CalcularPH(int leituraBruta)
 {
+
   //Converter a leitura do ADC para Voltagem
   float voltagem = (leituraBruta * 3.3) / 4095.0;
-
   //Calcula o valor de PH 
   float valorPH = 7.0 + ((PH_Neutro - voltagem) / PH_Passo);
-
   return valorPH;
+
 }
 
 //funcao principal
 void processarMonitoramento()
 {
-  int leituraSal = analogRead(pinoSalinidade);
-  int leituraPH = analogRead(pinoPH); 
+
+  int leituraSal = lerMedidaADC(pinoSalinidade);
+  int leituraPH = lerMedidaADC(pinoPH); 
 
 float valorSal = converterLeitura(leituraSal);
 float valorPH = CalcularPH(leituraPH);
-//trava de seguraca de PH para evitar valores loucos * novo
+
+//trava de seguraca de PH para evitar valores loucos
 if (valorPH > 14.0) valorPH = 14.0;
 if (valorPH < 0.0) valorPH = 0.0;
 
-
-Serial.print("Valor Final: ");
-    Serial.println(valorSal);
-    Serial.println(" mg/L");
-    Serial.println ("Nivel de PH");
-    Serial.println (valorPH);
+    Serial.println("---Valores Finais---");
+    Serial.printf("Salinidade: %.2f mg/L\n", valorSal);
+    Serial.printf("Nivel de PH: %.2f\n", valorPH);
+    Serial.println ("---");
 }
 //Funcao de conversa entre o codigo e o Arduino
 
@@ -60,33 +76,7 @@ void setup()
 
 void loop()
 {
-  //executa um loop infinito
   processarMonitoramento();
   delay(1000);//espera 1 segundo entre as leituras
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //criado por: Flix codes.
