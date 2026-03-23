@@ -95,4 +95,4 @@ contato com água real. A física não aceita pull requests.
 
 ## Autor
 
-**Flix codes** — [github.com/flixgamerd](https://github.com/flixgamerd) e sua **Equipa**
+**Flix codes** - [github.com/flixgamerd](https://github.com/flixgamerd) - e sua **Equipa**
