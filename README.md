@@ -25,8 +25,16 @@ suaviza ruído via média ADC e transmite os dados pela porta serial.
 | Hardware | ESP32 |
 | Linguagem | C++ / Arduino Framework |
 | Build | arduino-cli / PlatformIO |
-| Simulação | Wokwi |
+| Simulação | [Wokwi](https://wokwi.com/projects/457864289491458049) |
 | Editor | Neovim (Arch Linux) |
+
+---
+
+## 🔬 Simulação
+
+Experimente o circuito em funcionamento sem hardware físico:
+
+**[▶ Abrir simulação no Wokwi](https://wokwi.com/projects/457864289491458049)**
 
 ---
 
@@ -87,4 +95,4 @@ contato com água real. A física não aceita pull requests.
 
 ## Autor
 
-**Flix codes** — [github.com/flixgamerd](https://github.com/flixgamerd)
+**Flix codes** — [github.com/flixgamerd](https://github.com/flixgamerd) e sua **Equipa**
