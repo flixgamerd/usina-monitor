@@ -14,7 +14,8 @@ suaviza ruído via média ADC e transmite os dados pela porta serial.
 - **pH** — cálculo por voltagem com calibração configurável
 - **Suavização de ruído** — média de 10 amostras por ciclo de leitura
 - **Clamping de segurança** — pH travado entre 0.0 e 14.0, sem valores impossíveis
-- **Dual-channel** — dois sensores simultâneos nos pinos 34 e 35
+- **Múltiplos tanques** — array dinâmico com detecção automática via `sizeof`
+- **Identificação por tanque** — cada leitura serial identifica a origem
 
 ---
 
@@ -61,9 +62,13 @@ arduino-cli monitor -p /dev/ttyUSB0 --config baudrate=115200
 
 ## 📡 Saída serial esperada
 ```
----Valores Finais---
+--- Tanque-A ---
 Salinidade: 734.56 ppm
 Nivel de PH: 7.23
+---
+--- Tanque-B ---
+Salinidade: 612.10 ppm
+Nivel de PH: 6.89
 ---
 ```
 
@@ -95,4 +100,4 @@ contato com água real. A física não aceita pull requests.
 
 ## Autor
 
-**Flix codes** - [github.com/flixgamerd](https://github.com/flixgamerd) - e sua **Equipa**
+**Flix codes** — [github.com/flixgamerd](https://github.com/flixgamerd) e a minha **Equipa**
