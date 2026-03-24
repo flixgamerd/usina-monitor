@@ -2,20 +2,18 @@
 //
 struct Sensor 
 {
-  int pino;
-  String nome;
+  int pinoSalinidade;
+  int pinoPH;
+  const char* nome;
 };
 
 Sensor tanques[] = {
-  {34, "Tanque-A"},
-  {35, "Tanque-B"},
-  {36, "Tanque-C"}
+  {34,35, "Tanque-A"},
+  {36, 39, "Tanque-B"}
 };
+const int NUM_TANQUES = sizeof(tanques) / sizeof(tanques[0]);
 
-//---Variaveis---pra definir os pinos 
-const int pinoSalinidade = 34;
-const int pinoPH = 35;//novo pino adicionado
-
+//---Variaveis---pra definir os pinos*Removidas 
 //--Configuracao da medida ADC.
 const int NUM_AMOSTRAS = 10;
 
@@ -66,14 +64,17 @@ void processarMonitoramento(Sensor tanque)
   int leituraSal = lerMedidaADC(tanque.pinoSalinidade);
   int leituraPH = lerMedidaADC(tanque.pinoPH); 
 
+
 float valorSal = converterLeitura(leituraSal);
 float valorPH = CalcularPH(leituraPH);
+
 
 //trava de seguraca de PH para evitar valores loucos
 if (valorPH > 14.0) valorPH = 14.0;
 if (valorPH < 0.0) valorPH = 0.0;
 
-    Serial.println("--- %s ---\n", tanque.nome);
+
+    Serial.printf("--- %s ---\n", tanque.nome);
     Serial.printf("Salinidade: %.2f mg/L\n", valorSal);
     Serial.printf("Nivel de PH: %.2f\n", valorPH);
     Serial.println ("---");
@@ -83,13 +84,19 @@ if (valorPH < 0.0) valorPH = 0.0;
 void setup()
 {
     Serial.begin(115200);//inicia a conversa
-    pinMode(pinoSalinidade, INPUT);
-    pinMode(pinoPH, INPUT);
+    for (int p = 0; p < NUM_TANQUES; p++ )
+    {
+    pinMode(tanques[p].pinoSalinidade, INPUT);
+    pinMode(tanques[p].pinoPH, INPUT);
+    }
 }
 
 void loop()
 {
-  processarMonitoramento();
+  for (int pi = 0; pi < NUM_TANQUES; pi++)
+  {
+  processarMonitoramento(tanques[pi]);
+  }
   delay(1000);//espera 1 segundo entre as leituras
 }
 //criado por: Flix codes.
