@@ -1,4 +1,17 @@
 #include <Arduino.h>
+//
+struct Sensor 
+{
+  int pino;
+  String nome;
+};
+
+Sensor tanques[] = {
+  {34, "Tanque-A"},
+  {35, "Tanque-B"},
+  {36, "Tanque-C"}
+};
+
 //---Variaveis---pra definir os pinos 
 const int pinoSalinidade = 34;
 const int pinoPH = 35;//novo pino adicionado
@@ -47,11 +60,11 @@ float CalcularPH(int leituraBruta)
 }
 
 //funcao principal
-void processarMonitoramento()
+void processarMonitoramento(Sensor tanque)
 {
 
-  int leituraSal = lerMedidaADC(pinoSalinidade);
-  int leituraPH = lerMedidaADC(pinoPH); 
+  int leituraSal = lerMedidaADC(tanque.pinoSalinidade);
+  int leituraPH = lerMedidaADC(tanque.pinoPH); 
 
 float valorSal = converterLeitura(leituraSal);
 float valorPH = CalcularPH(leituraPH);
@@ -60,7 +73,7 @@ float valorPH = CalcularPH(leituraPH);
 if (valorPH > 14.0) valorPH = 14.0;
 if (valorPH < 0.0) valorPH = 0.0;
 
-    Serial.println("---Valores Finais---");
+    Serial.println("--- %s ---\n", tanque.nome);
     Serial.printf("Salinidade: %.2f mg/L\n", valorSal);
     Serial.printf("Nivel de PH: %.2f\n", valorPH);
     Serial.println ("---");
