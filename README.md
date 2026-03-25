@@ -96,8 +96,3 @@ Projeto desenvolvido e testado em ambiente simulado (Wokwi).
 Certifique-se de proteger adequadamente o hardware antes de qualquer
 contato com água real. A física não aceita pull requests.
 
----
-
-## Autor
-
-**Flix codes** — [github.com/flixgamerd](https://github.com/flixgamerd) e a minha **Equipa**
